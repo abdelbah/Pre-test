@@ -14,6 +14,7 @@ public class CustomerAccount implements Account {
 
     public Double withdrawAndReportBalance(Double withdrawnAmount, AccountRule rule) {
         isAmountPositive(withdrawnAmount);
+        isRuleNotNull(rule);
         Double resultBalance = this.getAccountBalance() - withdrawnAmount;
         if (rule.withdrawPermitted(resultBalance)){
             this.setAccountBalance(resultBalance);
@@ -21,6 +22,12 @@ public class CustomerAccount implements Account {
         }
         else {
             throw new IllegalBalanceException(resultBalance);
+        }
+    }
+
+    private void isRuleNotNull(AccountRule rule) {
+        if(rule == null){
+            throw new IllegalArgumentException();
         }
     }
 

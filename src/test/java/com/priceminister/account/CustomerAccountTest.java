@@ -19,7 +19,8 @@ import com.priceminister.account.implementation.*;
  * 
  */
 public class CustomerAccountTest {
-    
+
+    private static final double AMOUNT = 200.00;
     private Account customerAccount;
     private AccountRule rule;
 
@@ -40,7 +41,7 @@ public class CustomerAccountTest {
 
     @Test
     public void accountWithMoneyShouldHavePositiveBalance() {
-        customerAccount.setAccountBalance(200.00);
+        customerAccount.setAccountBalance(AMOUNT);
         assertTrue(customerAccount.getAccountBalance() > 0);
     }
     
@@ -49,13 +50,13 @@ public class CustomerAccountTest {
      */
     @Test
     public void addShouldAcceptPositiveAmount() {
-        customerAccount.add(200.00);
-        assertEquals(200.00, customerAccount.getAccountBalance(), 0);
+        customerAccount.add(AMOUNT);
+        assertEquals(AMOUNT, customerAccount.getAccountBalance(), 0);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void addShouldNotAcceptNegativeAmount() {
-        customerAccount.add(-200.00);
+        customerAccount.add(-AMOUNT);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -78,21 +79,26 @@ public class CustomerAccountTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void withdrawAndReportBalanceGetsZeroWithrawnAmountAndThrowsException() throws IllegalBalanceException {
+    public void withdrawAndReportBalanceGetsZeroWithdrawAmountAndThrowsException() throws IllegalBalanceException {
         customerAccount.withdrawAndReportBalance(0.00, rule);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void withdrawAndReportBalanceGetsWithNullRuleThrowsException() throws IllegalBalanceException {
+        customerAccount.withdrawAndReportBalance(0.00, null);
     }
 
     @Test
     public void withdrawAndReportBalanceShouldReturnPositiveBalance(){
-        customerAccount.setAccountBalance(200.00);
+        customerAccount.setAccountBalance(AMOUNT);
         customerAccount.withdrawAndReportBalance(150.00, rule);
         assertEquals(50.00, customerAccount.getAccountBalance(), 0);
     }
 
     @Test
     public void withdrawAndReportBalanceShouldReturnZeroBalance(){
-        customerAccount.setAccountBalance(200.00);
-        customerAccount.withdrawAndReportBalance(200.00, rule);
+        customerAccount.setAccountBalance(AMOUNT);
+        customerAccount.withdrawAndReportBalance(AMOUNT, rule);
         assertEquals(0.0, customerAccount.getAccountBalance(), 0);
     }
 }
